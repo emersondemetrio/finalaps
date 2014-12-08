@@ -26,9 +26,13 @@ public class Jogada2048 implements Jogada {
     public String toString() {
         return Arrays.toString(estado);
     }
-    
-    public static Object jogadaGenerica(){
+
+    public static Object jogadaGenerica() {
         Peao[] p = new Peao[16];
         return new Jogada2048(p, 'a');
+    }
+
+    public void setEstadoLocal(Peao[] outroEstado) {
+        this.estado = outroEstado;
     }
 }

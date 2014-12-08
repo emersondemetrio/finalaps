@@ -24,7 +24,7 @@ public class OuvidorTeclas extends KeyAdapter {
         VK_R
     };
 
-    private static String[] metodos = {
+    private static final String[] metodos = {
         "up",
         "down",
         "left",
@@ -57,8 +57,8 @@ public class OuvidorTeclas extends KeyAdapter {
     @Override
     public void keyPressed(KeyEvent k) {
         super.keyPressed(k);
+        System.err.println("OUVIDOR A");
         tabuleiro.setEstadoAnterior();
-
         Method acao = mapaAssociador.get(k.getKeyCode());
 
         if (acao == null) {

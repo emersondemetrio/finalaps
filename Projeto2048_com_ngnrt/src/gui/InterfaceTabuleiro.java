@@ -1,6 +1,5 @@
 package gui;
 
-import gui.Interface2048;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -40,7 +39,7 @@ public class InterfaceTabuleiro extends JPanel {
                 peoes[i] = Peao.DOIS;
             }
         }
-        this.estadoAnterior = peoes;
+        this.setEstadoAnterior();
         //this.iniciarPeoes();
     }
 
@@ -60,9 +59,14 @@ public class InterfaceTabuleiro extends JPanel {
         this.estadoVitoria = true;
     }
 
+    // controle de jogadas
     public void setEstadoAnterior() {
-        Peao[] atual = this.getPeoes();
-        this.estadoAnterior = atual;
+        this.estadoAnterior = this.getPeoes();
+        imprimirMatriz(this.getPeoes());
+    }
+
+    public Peao[] getEstadoAnterior() {
+        return this.estadoAnterior;
     }
 
     /**
@@ -80,10 +84,6 @@ public class InterfaceTabuleiro extends JPanel {
 
     public Peao[] getPeoes() {
         return this.peoes;
-    }
-
-    public Peao[] getEstadoAnterior() {
-        return this.estadoAnterior;
     }
 
     public Peao[] gerarEstadoAleatorio() {
@@ -125,6 +125,8 @@ public class InterfaceTabuleiro extends JPanel {
 
     public void setPeoes(Peao[] p) {
         this.peoes = p;
+        System.err.println("setPeoes: ");
+        imprimirMatriz(p);
         this.repaint();
     }
 
@@ -364,6 +366,7 @@ public class InterfaceTabuleiro extends JPanel {
 
         if (peoes == null) {
             peoes = gerarEstadoAleatorio();
+            System.err.println("[Tabuleiro] paint() null!!!");
         }
 
         for (int x = 0; x < 4; x++) {
@@ -377,13 +380,17 @@ public class InterfaceTabuleiro extends JPanel {
      * @param um array de peoes
      * @Imprime uma array
      */
-    private void imprimirMatriz(Peao[] p) {
-        for (int i = 0; i < p.length; i++) {
-            System.out.print(i + " - [ " + p[i].getEnumPeao() + " ]");
-        }
+    public static void imprimirMatriz(Peao[] p) {
+        System.err.println("\n"
+                + "|" + p[0].toString() + "" + p[1].toString() + "" + p[2].toString() + "" + p[3].toString() + " |\n"
+                + "|" + p[4].toString() + "" + p[5].toString() + "" + p[6].toString() + "" + p[7].toString() + " |\n"
+                + "|" + p[8].toString() + "" + p[9].toString() + "" + p[10].toString() + "" + p[11].toString() + " |\n"
+                + "|" + p[12].toString() + "" + p[13].toString() + "" + p[14].toString() + "" + p[15].toString() + " |\n"
+                + "\n");
     }
 
     public void enviarJogada() {
+        this.setEstadoAnterior();
         Jogada2048 nova = new Jogada2048(this.getPeoes(), 'a');
         ponte.enviarJogada(nova);
     }

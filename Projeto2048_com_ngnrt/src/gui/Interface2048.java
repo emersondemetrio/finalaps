@@ -1,5 +1,6 @@
 package gui;
 
+import java.util.Arrays;
 import javax.swing.JOptionPane;
 import logica.Jogador;
 import logica.Controle;
@@ -68,6 +69,7 @@ public class Interface2048 extends javax.swing.JFrame {
     public void habilitar() {
         enviarJogadaEspecial.setEnabled(true);
         this.habilitado = true;
+        this.tabuleiro.setEstadoAnterior();
         tabuleiro.addKeyListener(ouvidorTeclas);
     }
 
@@ -179,14 +181,17 @@ public class Interface2048 extends javax.swing.JFrame {
 
     private void enviarJogadaEspecialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarJogadaEspecialActionPerformed
 
-        if (this.getContadorJogadas() >= 5) {
+        if (this.getContadorJogadas() >= 1) {
             String desafio = "Escolha uma opção de desafio: \n"
                     + "Digite a tecla [ b ] para embaralhar o tabuleiro do adversario\n"
                     + "Digite a tecla [ c ] para desfazer a ultima jogada do adversario.";
+
             char tipo = this.receba(desafio).charAt(0);
             controle.enviarDesafio(tipo);
+
             this.zerarContadorJogadas();
             this.desabilitar();
+
         } else {
             mostre("Impossível enviar desafio.\n"
                     + "Só é possível enviar um desafio após 5 jogadas.");
@@ -260,6 +265,7 @@ public class Interface2048 extends javax.swing.JFrame {
 
     public String getNomeServidor() {
         String idServidor = "venus.inf.ufsc.br";
+        idServidor = "127.0.0.1";
         String servidor = JOptionPane.showInputDialog(this, "Informe o servidor aonde deseja conectar-se:", idServidor);
         return servidor;
     }
@@ -338,6 +344,8 @@ public class Interface2048 extends javax.swing.JFrame {
     }
 
     public void atualizarEstado(char tipo, Peao[] estadoLocal) {
+        System.err.println("atualizarEstado");
+        InterfaceTabuleiro.imprimirMatriz(estadoLocal);
 
         switch (tipo) {
             case 'a':
@@ -351,7 +359,7 @@ public class Interface2048 extends javax.swing.JFrame {
                 break;
 
             case 'c':
-                this.tabuleiro.setPeoes(estadoLocal);
+                this.tabuleiro.setPeoes(this.tabuleiro.getEstadoAnterior());
                 this.habilitar();
                 break;
 

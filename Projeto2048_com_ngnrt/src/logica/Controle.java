@@ -37,12 +37,29 @@ public class Controle {
     }
 
     public void enviarDesafio(char tipo) {
-        Jogada2048 nova = new Jogada2048(null, tipo);
-        this.enviarJogada(nova);
+        Peao[] estado;
+        if (tipo == 'b') {
+            /**
+             * @params: um estado aleatorio
+             * @deve: atualizar tabuleiro do adversario na minha maquina
+             */
+            estado = this.viewAdversario.getTabuleiro().gerarEstadoAleatorio();
+            this.viewAdversario.atualizarEstado('b', estado);
+
+        } else {
+            /**
+             * @params: um estado anterior
+             * @deve: atualizar tabuleiro do adversario na minha maquina
+             */
+            estado = this.viewAdversario.getTabuleiro().getEstadoAnterior();
+            this.viewAdversario.atualizarEstado('b', estado);
+        }
+        Jogada2048 lance = new Jogada2048(estado, tipo);
+        this.enviarJogada(lance);
     }
 
     public String getAdversario(String s) {
-        return "Tabuleiro: getAdversario";
+        return "[Tabuleiro] getAdversario()";
     }
 
     public boolean getStatusConexao() {
@@ -88,19 +105,6 @@ public class Controle {
     public void enviarJogada(Jogada2048 lance) {
         Jogada jog = (Jogada) lance;
         interno.enviarJogada(jog);
-        char tipo = lance.getTipo();
-
-        switch (tipo) {
-            case 'b':
-                this.viewAdversario.atualizarEstado('b', lance.getEstadoLocal());
-                break;
-            case 'c':
-                this.viewAdversario.atualizarEstado('c', viewAdversario.getTabuleiro().getEstadoAnterior());
-                break;
-            default:
-                break;
-        }
-
         this.viewLocal.desabilitar();
     }
 
@@ -108,28 +112,52 @@ public class Controle {
         char tipo = jog.getTipo();
         switch (tipo) {
             case 'a':
+                /**
+                 * @params: uma jogada
+                 * @deve: atualizar tab adversario na minha maquina
+                 * @deve: habilitar meu tabuleiro
+                 */
                 this.viewAdversario.atualizarEstado('a', jog.getEstadoLocal());
                 this.viewLocal.habilitar();
                 break;
 
             case 'b':
+                /**
+                 * @params: uma jogada com estado aleatorio
+                 * @deve: atualizar meu tab na minha maquina
+                 * @deve: habilitar meu tabuleiro
+                 */
                 this.viewLocal.atualizarEstado('b', jog.getEstadoLocal());
                 this.viewLocal.habilitar();
                 break;
 
             case 'c':
-                Peao[] anterior = viewLocal.getTabuleiro().getEstadoAnterior();
-                this.viewLocal.atualizarEstado('c', anterior);
+                /**
+                 * @params: uma jogada com estado anterior
+                 * @deve: atualizar tab adversario na minha maquina
+                 * @deve: habilitar meu tabuleiro
+                 */
+                this.viewLocal.atualizarEstado('c', jog.getEstadoLocal());
                 this.viewLocal.habilitar();
                 break;
 
             case 'e':
+                /**
+                 * @params: tipo 'e'
+                 * @deve: encerrar partida.
+                 */
                 this.viewLocal.atualizarEstado('e', jog.getEstadoLocal());
                 viewLocal.removerOuvidor();
                 viewAdversario.removerOuvidor();
                 break;
 
             default:
+                /**
+                 * @params: uma jogada
+                 * @deve: atualizar tab adversario na minha maquina
+                 * @deve: habilitar meu tabuleiro
+                 */
+                System.err.println("Controle recebe jogada tipo DEFAULT!!");
                 this.viewAdversario.atualizarEstado('a', jog.getEstadoLocal());
                 this.viewLocal.habilitar();
                 break;
@@ -140,8 +168,6 @@ public class Controle {
          e atualizo o meu tabuleiro la no outrol ado.                
          */
 
-        System.out.println("Controle: 99 - receberJogada()\n");
-        System.out.println(jog);
     }
 
     /**
