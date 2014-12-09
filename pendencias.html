@@ -1,0 +1,156 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>PENDENCIAS</title>
+	<style type="text/css">
+	p{text-align: justify;}
+	li{padding: 10px; margin: 1px; font-weight: bold;}
+	.green{background: rgba(0, 128, 0, 0.48);}
+	.red{background: rgba(255, 0, 0, 0.61);	color: #fff;}
+	.info{padding: 0;}
+	</style>
+	<script type="text/javascript">
+	function getTotal(){
+		var t = document.getElementsByClassName("red");
+		var faltam = t.length;
+		document.getElementById("total").innerHTML = faltam - 1;
+	}
+	</script>
+</head>
+<body onload="getTotal()">
+
+	<div>
+		<div>	
+			<h2>Trabalho FINAL APS</h2>			
+		</div>
+		<p style="padding:10px; background-color:#eee; font-weight:bold;">
+			Como consta no plano de ensino, para os alunos aprovados, metade do peso da média final é do trabalho de <br>desenvolvimento de	software, a ser produzido ao longo de todo o semestre letivo. <br/>
+			A seguir, as orientações para o desenvolvimento do trabalho:
+		</p>
+		<ul>
+			<li class="info" style="background-color:red; padding:10px;">
+				Falta(m) <strong class="red" id="total"></strong> item(ns) / diagrama(s).
+			</li>
+			<li class="green">O trabalho será feito em duplas ou trios e consistirá no desenvolvimento de um jogo;</li>
+			<li class="green">A modelagem UML deverá usar a ferramenta Visual Paradigm (community version);</li>
+			<li class="green">
+				A implementação deverá ser em Java (no laboratório em que ocorrerá a apresentação, 
+				haverá apenas Eclipse para manipulação de código);
+			</li>
+			<li class="green">É obrigatória a geração de arquivo executável (.jar);</li>
+		</ul>
+		<h2>
+			O conteúdo a ser entregue ao professor no final do semestre (em um arquivo .ZIP) consiste em:
+		</h2>
+
+		<ul>
+			<li class="green">Especificação de requisitos, segundo template tratado na disciplina (doc, docx, rtf, etc);</li>
+			<li>
+				<p style="font-weight:bold">				
+					Especificação de projeto em UML, desenvolvida no software Visual Paradigm (entregar o arquivo .vpp gerado pelo Visual Paradigm). Conteúdo mínimo:				
+				</p>	
+
+				<ul>
+					<li class="green">3 Diagrama(s) de classes</li>					
+					<li class="green">1 Diagrama(s) de casos de uso</li>						
+					<li class="green">1 Diagrama(s) de visão geral de interação (para sequenciamento dos casos de uso);</li>
+					<li class="green">
+						10 Diagramas de atividades para refinamento dos casos de uso (pelo menos um por caso de uso)
+					</li>
+
+					<li class="info">
+						<p>11 Diagramas de sequência para refinamento dos casos de uso (pelo menos um por caso de uso)</p>		
+						<ul>
+							<li class="green">Iniciar Componentes Gráficos</li>
+							<li class="green">Conectar</li>
+							<li class="green">Inserir Nome</li>
+							<li class="green">Inserir Servidor</li>
+							<li class="green">Iniciar Partida</li>
+							<li class="green">Receber Solicitacao de Inicio</li>
+							<li class="green">Enviar Jogada</li>
+							<li class="green">Enviar Desafio</li>
+							<li class="green">Tratar Jogada (Enviada)</li>
+							<li class="green">Tratar Jogada (Recebida)</li>
+							<li class="green">Receber Jogada</li>
+							<li class="green">Sair</li>							
+						</ul>							
+					</li>
+
+					<li class="info">
+						<p>2 Diagramas de estados (pelo menos para duas classes)</p>						
+						<ul>						
+							<li class="red">Classe Jogador</li>
+							<li class="green">Classe Peao</li>							
+						</ul>
+					</li>
+
+					<li class="info">
+						<p>
+							5 Diagramas de atividades para modelagem de algoritmo de método de classe (pelo menos para cinco
+							métodos);
+						</p>
+						<ul>
+							<li class="green">1 InterfaceTabuleiro - gerarEstadoAleatorio( )</li>
+							<li class="green">2 InterfaceTabuleiro - paint( )</li>
+							<li class="green">3 InterfaceTabuleiro - juntarLinha( )</li>
+							<li class="green">4 InterfaceTabuleiro - left( )</li>
+							<li class="green">5 InterfaceTabuleiro - desenharPeao( )</li>
+						</ul>
+						<br>		
+					</li>
+
+					<li class="green">Código Java (que compile e execute, sem erros);</li>
+
+					<li class="green">Arquivo executável (.jar)</li>
+
+					<li class="green">
+						Notas de entrega (release notes): <br>
+						texto com instruções de instalação / manutenção para futuros usuários do software; <br>
+						explicitação dos aspectos positivos e negativos da versão produzida <br>
+						(lembrando que é natural que a primeira versão não seja a melhor possível); <br>
+						eventuais restrições contidas na versão entregue.
+						<br>					
+					</li>
+				</ul>
+
+			</li>
+
+			<li class="green">
+				O jogo deve obrigatoriamente ter uma interface gráfica;
+			</li>
+			<li class="green">
+				O jogo deve obrigatoriamente executar distribuído, com o suporte para aplicações distribuídas, <br>
+				NetGamesNRT, produzido por Leonardo Brasil – por isso, não poderá ser de tempo real;
+			</li>
+			<li class="green">
+				O jogo deve apresentar um nível mínimo de complexidade (jogos do tipo matar mosquinhas, baratinhas ou congêneres, ou com lógica simplória que até um chimpanzé daria conta de “jogar”, não serão admitidos);
+			</li>
+			<li class="green">
+				O jogo deve envolver interação entre os participantes. <br>
+				Jogos em que cada jogador fica realizando alguma tarefa do seu lado e, ao final, comparam-se placares, não serão admitidos;
+			</li>
+			<li class="green">
+				Ficam proibidos os jogos constantes na lista de jogos já implementados em semestres anteriores – lista publicada na página da disciplina;
+			</li>
+			<li class="green">
+				É de responsabilidade do aluno verificar que o jogo por ele escolhido cumpre os requisitos estabelecidos (particularmente não estar entre os proibidos, interação e complexidade mínima);
+			</li>
+			<li class="green">
+				Fica a critério do aluno implementar persistência, interfaces 3D mais elaboradas etc;
+			</li>
+			<li class="green">
+				A entrega do trabalho será gradual e seguirá o calendário divulgado na página da disciplina
+			</li>
+			<li class="green"> 
+				Trabalhos que não produzirem o conjunto de resultados acima descrito, inclusive o programa em funcionamento no momento da apresentação ao professor, não obterão nota superior a 5,0 (0 a 5, dependendo dos resultados produzidos), levando seus autores à reprovação, como pode ser observado com uma simulação na planilha de médias.
+			</li>
+			<br >
+			<br >
+			<br >
+			<br >
+			<br >
+		</div>
+
+	</body>
+	</html>

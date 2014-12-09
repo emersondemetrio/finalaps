@@ -1,6 +1,5 @@
 package rede;
 
-//import gui.Interface2048;
 import br.ufsc.inf.leobr.cliente.Jogada;
 import br.ufsc.inf.leobr.cliente.OuvidorProxy;
 import br.ufsc.inf.leobr.cliente.Proxy;
@@ -9,10 +8,8 @@ import br.ufsc.inf.leobr.cliente.exception.JahConectadoException;
 import br.ufsc.inf.leobr.cliente.exception.NaoConectadoException;
 import br.ufsc.inf.leobr.cliente.exception.NaoJogandoException;
 import br.ufsc.inf.leobr.cliente.exception.NaoPossivelConectarException;
+
 import gui.Interface2048;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import logica.Controle;
 
 public class AtorNetGames implements OuvidorProxy {
 
@@ -38,17 +35,14 @@ public class AtorNetGames implements OuvidorProxy {
 
         } catch (JahConectadoException ex) {
             inter.mostre("Já existe uma conexão estabelecida.");
-            Logger.getLogger(Controle.class.getName()).log(Level.SEVERE, null, ex);
             return 201;
 
         } catch (NaoPossivelConectarException ex) {
             inter.mostre("Impossível conectar. \nTente reiniciar o servidor.");
-            Logger.getLogger(Controle.class.getName()).log(Level.SEVERE, null, ex);
             return 404;
 
         } catch (ArquivoMultiplayerException ex) {
             inter.mostre("Nenhum arquivo de propriedades foi encontrado.");
-            Logger.getLogger(Controle.class.getName()).log(Level.SEVERE, null, ex);
             return 500;
         }
 
@@ -95,7 +89,7 @@ public class AtorNetGames implements OuvidorProxy {
         try {
             interno.desconectar();
 
-        } catch (Exception e) {
+        } catch (NaoConectadoException e) {
             inter.mostre("Impossivel desconectar.");
         }
     }
@@ -114,6 +108,7 @@ public class AtorNetGames implements OuvidorProxy {
     @Override
     public void iniciarNovaPartida(Integer posicao) {
         inter.tratarIniciarPartida(posicao);
+
         if (posicao == 1) {
             inter.iniciarDesafiante();
         } else {
@@ -123,21 +118,28 @@ public class AtorNetGames implements OuvidorProxy {
 
     @Override
     public void finalizarPartidaComErro(String message) {
-        inter.mostre("Erro! " + message);
+        inter.mostre("Erro! \n" + message);
         System.exit(0);
     }
 
     @Override
     public void receberMensagem(String msg) {
-        // to do
+        /**
+         * @not used;
+         */
     }
 
     @Override
     public void tratarConexaoPerdida() {
-        // to do
+        /**
+         * @not used;
+         */
     }
 
     @Override
     public void tratarPartidaNaoIniciada(String message) {
+        /**
+         * @not used;
+         */
     }
 }
