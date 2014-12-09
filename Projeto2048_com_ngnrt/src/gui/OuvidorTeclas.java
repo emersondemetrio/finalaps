@@ -11,10 +11,9 @@ import java.awt.event.KeyEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import logica.Peao;
 
 public class OuvidorTeclas extends KeyAdapter {
-
+    
     private static final HashMap<Integer, Method> mapaAssociador = new HashMap<>();
     private static Integer[] TECLAS_VALIDAS = {
         VK_UP,
@@ -23,7 +22,7 @@ public class OuvidorTeclas extends KeyAdapter {
         VK_RIGHT,
         VK_R
     };
-
+    
     private static final String[] metodos = {
         "up",
         "down",
@@ -31,19 +30,19 @@ public class OuvidorTeclas extends KeyAdapter {
         "right",
         "iniciarPeoes"
     };
-
+    
     private static InterfaceTabuleiro tabuleiro;
     private static final OuvidorTeclas INSTANCE = new OuvidorTeclas();
-
+    
     private OuvidorTeclas() {
         this.associarTeclas(TECLAS_VALIDAS);
     }
-
+    
     public static OuvidorTeclas getOuvidorTeclas(InterfaceTabuleiro g) {
         tabuleiro = g;
         return INSTANCE;
     }
-
+    
     private void associarTeclas(Integer[] teclas) {
         for (int i = 0; i < teclas.length; i++) {
             try {
@@ -53,26 +52,25 @@ public class OuvidorTeclas extends KeyAdapter {
             }
         }
     }
-
+    
     @Override
     public void keyPressed(KeyEvent k) {
         super.keyPressed(k);
-        System.err.println("OUVIDOR A");
-        tabuleiro.setEstadoAnterior();
+        tabuleiro.setEstadoAnterior("Ouvidor");
+        
         Method acao = mapaAssociador.get(k.getKeyCode());
-
         if (acao == null) {
             System.gc();
             return;
         }
-
+        
         try {
             acao.invoke(tabuleiro);
             tabuleiro.repaint();
         } catch (InvocationTargetException | IllegalAccessException | IllegalArgumentException e) {
             System.err.println("Erro: " + e);
         }
-
+        
         if (!tabuleiro.verificarMovimentoPossivel()) {
             tabuleiro.setEstadoDerrota();
         } else {

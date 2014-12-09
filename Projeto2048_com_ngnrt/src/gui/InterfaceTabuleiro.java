@@ -19,7 +19,7 @@ public class InterfaceTabuleiro extends JPanel {
     protected static final int VALOR_MARGEM = 16;
 
     protected Peao[] peoes;
-    private Peao[] estadoAnterior;
+    protected Peao[] estadoAnterior;
 
     protected boolean estadoVitoria;
     protected boolean estadoDerrota;
@@ -35,12 +35,10 @@ public class InterfaceTabuleiro extends JPanel {
         for (int i = 0; i < peoes.length; i++) {
             this.peoes[i] = Peao.ZERO;
             if (i > 13) {
-                //peoes[i] = Peao.SEMI_OBJETIVO;
                 peoes[i] = Peao.DOIS;
             }
         }
-        this.setEstadoAnterior();
-        //this.iniciarPeoes();
+        this.setEstadoAnterior("InterfaceTabuleiro: construtor");
     }
 
     public boolean getEstadoVitoria() {
@@ -60,9 +58,9 @@ public class InterfaceTabuleiro extends JPanel {
     }
 
     // controle de jogadas
-    public void setEstadoAnterior() {
+    public void setEstadoAnterior(String msg) {
         this.estadoAnterior = this.getPeoes();
-        imprimirMatriz(this.getPeoes());
+        imprimirMatriz("CHAMANDO setEstadoAnterior " + msg, this.getPeoes());
     }
 
     public Peao[] getEstadoAnterior() {
@@ -125,8 +123,6 @@ public class InterfaceTabuleiro extends JPanel {
 
     public void setPeoes(Peao[] p) {
         this.peoes = p;
-        System.err.println("setPeoes: ");
-        imprimirMatriz(p);
         this.repaint();
     }
 
@@ -171,8 +167,8 @@ public class InterfaceTabuleiro extends JPanel {
      */
     private List<Integer> encontrarIndicesVazios() {
         List<Integer> lista = new LinkedList<>();
-        for (int i = 0; i < peoes.length; i++) {
-            if (peoes[i].estaVazio()) {
+        for (int i = 0; i < this.peoes.length; i++) {
+            if (this.peoes[i].estaVazio()) {
                 lista.add(i);
             }
         }
@@ -184,7 +180,7 @@ public class InterfaceTabuleiro extends JPanel {
     }
 
     private Peao getPeaoDaPosical(int posicaoX, int posicalY) {
-        return peoes[posicaoX + posicalY * VALOR_LINHA];
+        return this.peoes[posicaoX + posicalY * VALOR_LINHA];
     }
 
     /**
@@ -262,7 +258,7 @@ public class InterfaceTabuleiro extends JPanel {
     }
 
     private void setarLinha(int index, Peao[] re) {
-        System.arraycopy(re, 0, peoes, index * VALOR_LINHA, 4);
+        System.arraycopy(re, 0, this.peoes, index * VALOR_LINHA, 4);
     }
 
     /**
@@ -291,27 +287,27 @@ public class InterfaceTabuleiro extends JPanel {
      * @Move para direita
      */
     public void right() {
-        peoes = rotate(180);
+        this.peoes = rotate(180);
         left();
-        peoes = rotate(180);
+        this.peoes = rotate(180);
     }
 
     /**
      * @Move para cima
      */
     public void up() {
-        peoes = rotate(270);
+        this.peoes = rotate(270);
         left();
-        peoes = rotate(90);
+        this.peoes = rotate(90);
     }
 
     /**
      * @Move para baixo
      */
     public void down() {
-        peoes = rotate(90);
+        this.peoes = rotate(90);
         left();
-        peoes = rotate(270);
+        this.peoes = rotate(270);
     }
 
     /**
@@ -364,11 +360,6 @@ public class InterfaceTabuleiro extends JPanel {
         g.setFont(TIPO_FONTE);
         g.fillRect(0, 0, this.getSize().width, this.getSize().height);
 
-        if (peoes == null) {
-            peoes = gerarEstadoAleatorio();
-            System.err.println("[Tabuleiro] paint() null!!!");
-        }
-
         for (int x = 0; x < 4; x++) {
             for (int y = 0; y < 4; y++) {
                 this.desenharPeao(g, peoes[x + y * VALOR_LINHA], x, y);
@@ -376,22 +367,30 @@ public class InterfaceTabuleiro extends JPanel {
         }
     }
 
-    /**
-     * @param um array de peoes
-     * @Imprime uma array
-     */
-    public static void imprimirMatriz(Peao[] p) {
-        System.err.println("\n"
-                + "|" + p[0].toString() + "" + p[1].toString() + "" + p[2].toString() + "" + p[3].toString() + " |\n"
-                + "|" + p[4].toString() + "" + p[5].toString() + "" + p[6].toString() + "" + p[7].toString() + " |\n"
-                + "|" + p[8].toString() + "" + p[9].toString() + "" + p[10].toString() + "" + p[11].toString() + " |\n"
-                + "|" + p[12].toString() + "" + p[13].toString() + "" + p[14].toString() + "" + p[15].toString() + " |\n"
+    public static void imprimirMatriz(String s, Peao[] p) {
+        System.err.println(s + "\n"
+                + "[" + p[0].toString().trim() + "] [" + p[1].toString().trim() + "] [" + p[2].toString().trim() + "] [" + p[3].toString().trim() + "]\n"
+                + "[" + p[4].toString().trim() + "] [" + p[5].toString().trim() + "] [" + p[6].toString().trim() + "] [" + p[7].toString().trim() + "]\n"
+                + "[" + p[8].toString().trim() + "] [" + p[9].toString().trim() + "] [" + p[10].toString().trim() + "] [" + p[11].toString().trim() + "]\n"
+                + "[" + p[12].toString().trim() + "] [" + p[13].toString().trim() + "] [" + p[14].toString().trim() + "] [" + p[15].toString().trim() + "]\n"
                 + "\n");
     }
 
+    public static String getMatriz(Peao[] p) {
+        return "\n"
+                + "[" + p[0].toString().trim() + "] [" + p[1].toString().trim() + "] [" + p[2].toString().trim() + "] [" + p[3].toString().trim() + "]\n"
+                + "[" + p[4].toString().trim() + "] [" + p[5].toString().trim() + "] [" + p[6].toString().trim() + "] [" + p[7].toString().trim() + "]\n"
+                + "[" + p[8].toString().trim() + "] [" + p[9].toString().trim() + "] [" + p[10].toString().trim() + "] [" + p[11].toString().trim() + "]\n"
+                + "[" + p[12].toString().trim() + "] [" + p[13].toString().trim() + "] [" + p[14].toString().trim() + "] [" + p[15].toString().trim() + "]\n"
+                + "\n";
+    }
+
     public void enviarJogada() {
-        this.setEstadoAnterior();
         Jogada2048 nova = new Jogada2048(this.getPeoes(), 'a');
         ponte.enviarJogada(nova);
+    }
+
+    public static void log(Object e) {
+        System.out.println(e);
     }
 }

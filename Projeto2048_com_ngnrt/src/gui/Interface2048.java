@@ -69,7 +69,6 @@ public class Interface2048 extends javax.swing.JFrame {
     public void habilitar() {
         enviarJogadaEspecial.setEnabled(true);
         this.habilitado = true;
-        this.tabuleiro.setEstadoAnterior();
         tabuleiro.addKeyListener(ouvidorTeclas);
     }
 
@@ -181,16 +180,20 @@ public class Interface2048 extends javax.swing.JFrame {
 
     private void enviarJogadaEspecialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarJogadaEspecialActionPerformed
 
-        if (this.getContadorJogadas() >= 1) {
+        if (this.getContadorJogadas() >= 5) {
+
             String desafio = "Escolha uma opção de desafio: \n"
                     + "Digite a tecla [ b ] para embaralhar o tabuleiro do adversario\n"
                     + "Digite a tecla [ c ] para desfazer a ultima jogada do adversario.";
 
             char tipo = this.receba(desafio).charAt(0);
-            controle.enviarDesafio(tipo);
-
-            this.zerarContadorJogadas();
-            this.desabilitar();
+            if (tipo != 'b' && tipo != 'c') {
+                this.mostre("Escolha uma opção válida!");
+            } else {
+                controle.enviarDesafio(tipo);
+                this.zerarContadorJogadas();
+                this.desabilitar();
+            }
 
         } else {
             mostre("Impossível enviar desafio.\n"
@@ -258,14 +261,14 @@ public class Interface2048 extends javax.swing.JFrame {
         if (nome.equals("")) {
             nome = "jogador";
         }
-        this.setTitle(nome + " - " + this.getTitle());
+        this.setTitle(nome.toUpperCase() + " - " + this.getTitle());
         this.idUsuario = nome;
         return nome;
     }
 
     public String getNomeServidor() {
         String idServidor = "venus.inf.ufsc.br";
-        idServidor = "127.0.0.1";
+        //idServidor = "127.0.0.1";
         String servidor = JOptionPane.showInputDialog(this, "Informe o servidor aonde deseja conectar-se:", idServidor);
         return servidor;
     }
@@ -344,9 +347,6 @@ public class Interface2048 extends javax.swing.JFrame {
     }
 
     public void atualizarEstado(char tipo, Peao[] estadoLocal) {
-        System.err.println("atualizarEstado");
-        InterfaceTabuleiro.imprimirMatriz(estadoLocal);
-
         switch (tipo) {
             case 'a':
                 this.tabuleiro.setPeoes(estadoLocal);
@@ -354,12 +354,12 @@ public class Interface2048 extends javax.swing.JFrame {
                 break;
 
             case 'b':
-                this.tabuleiro.setPeoes(this.tabuleiro.gerarEstadoAleatorio());
+                this.tabuleiro.setPeoes(estadoLocal);
                 this.habilitar();
                 break;
 
             case 'c':
-                this.tabuleiro.setPeoes(this.tabuleiro.getEstadoAnterior());
+                this.tabuleiro.setPeoes(estadoLocal);
                 this.habilitar();
                 break;
 
@@ -370,6 +370,7 @@ public class Interface2048 extends javax.swing.JFrame {
                 break;
 
             default:
+                System.exit(0);
                 this.tabuleiro.setPeoes(estadoLocal);
                 this.habilitar();
                 break;

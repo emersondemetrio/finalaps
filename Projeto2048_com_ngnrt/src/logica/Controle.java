@@ -2,7 +2,7 @@ package logica;
 
 import br.ufsc.inf.leobr.cliente.Jogada;
 import gui.Interface2048;
-import java.util.Arrays;
+import gui.InterfaceTabuleiro;
 import rede.AtorNetGames;
 import rede.Jogada2048;
 
@@ -38,6 +38,7 @@ public class Controle {
 
     public void enviarDesafio(char tipo) {
         Peao[] estado;
+
         if (tipo == 'b') {
             /**
              * @params: um estado aleatorio
@@ -45,17 +46,59 @@ public class Controle {
              */
             estado = this.viewAdversario.getTabuleiro().gerarEstadoAleatorio();
             this.viewAdversario.atualizarEstado('b', estado);
+            Jogada2048 lance = new Jogada2048(estado, tipo);
+            this.enviarJogada(lance);
 
         } else {
+
             /**
              * @params: um estado anterior
              * @deve: atualizar tabuleiro do adversario na minha maquina
              */
             estado = this.viewAdversario.getTabuleiro().getEstadoAnterior();
-            this.viewAdversario.atualizarEstado('b', estado);
+            InterfaceTabuleiro.imprimirMatriz("ENVIAR DESAFIO ", estado);
+            this.viewAdversario.atualizarEstado('c', estado);
+            Jogada2048 lance = new Jogada2048(estado, tipo);
+            this.enviarJogada(lance);
         }
-        Jogada2048 lance = new Jogada2048(estado, tipo);
-        this.enviarJogada(lance);
+
+    }
+
+    public void enviarJogada(Jogada2048 lance) {
+        Jogada jog = (Jogada) lance;
+        interno.enviarJogada(jog);
+        this.viewLocal.desabilitar();
+    }
+
+    public void receberJogada(Jogada2048 jog) {
+        if (jog.getEstadoLocal() == null) {
+            viewLocal.mostre("ERRO! linha 114");
+            System.exit(0);
+        }
+
+        char tipoJogada = jog.getTipo();
+        if (tipoJogada != 'e') {
+            if (tipoJogada == 'a') {
+                this.viewAdversario.getTabuleiro().setEstadoAnterior("Receber jogada : a");
+                this.viewAdversario.atualizarEstado(tipoJogada, jog.getEstadoLocal());
+            }
+
+            if (tipoJogada == 'b') {
+                this.viewLocal.atualizarEstado(tipoJogada, jog.getEstadoLocal());
+            }
+
+            if (tipoJogada == 'c') {
+                InterfaceTabuleiro.imprimirMatriz("Receber jogada : c", jog.getEstadoLocal());
+                this.viewLocal.atualizarEstado(tipoJogada, jog.getEstadoLocal());
+            }
+
+            this.viewLocal.habilitar();
+
+        } else {
+            this.viewLocal.atualizarEstado('e', jog.getEstadoLocal());
+            viewLocal.removerOuvidor();
+            viewAdversario.removerOuvidor();
+        }
     }
 
     public String getAdversario(String s) {
@@ -100,74 +143,6 @@ public class Controle {
         } else {
             jogador2.setId(2);
         }
-    }
-
-    public void enviarJogada(Jogada2048 lance) {
-        Jogada jog = (Jogada) lance;
-        interno.enviarJogada(jog);
-        this.viewLocal.desabilitar();
-    }
-
-    public void receberJogada(Jogada2048 jog) {
-        char tipo = jog.getTipo();
-        switch (tipo) {
-            case 'a':
-                /**
-                 * @params: uma jogada
-                 * @deve: atualizar tab adversario na minha maquina
-                 * @deve: habilitar meu tabuleiro
-                 */
-                this.viewAdversario.atualizarEstado('a', jog.getEstadoLocal());
-                this.viewLocal.habilitar();
-                break;
-
-            case 'b':
-                /**
-                 * @params: uma jogada com estado aleatorio
-                 * @deve: atualizar meu tab na minha maquina
-                 * @deve: habilitar meu tabuleiro
-                 */
-                this.viewLocal.atualizarEstado('b', jog.getEstadoLocal());
-                this.viewLocal.habilitar();
-                break;
-
-            case 'c':
-                /**
-                 * @params: uma jogada com estado anterior
-                 * @deve: atualizar tab adversario na minha maquina
-                 * @deve: habilitar meu tabuleiro
-                 */
-                this.viewLocal.atualizarEstado('c', jog.getEstadoLocal());
-                this.viewLocal.habilitar();
-                break;
-
-            case 'e':
-                /**
-                 * @params: tipo 'e'
-                 * @deve: encerrar partida.
-                 */
-                this.viewLocal.atualizarEstado('e', jog.getEstadoLocal());
-                viewLocal.removerOuvidor();
-                viewAdversario.removerOuvidor();
-                break;
-
-            default:
-                /**
-                 * @params: uma jogada
-                 * @deve: atualizar tab adversario na minha maquina
-                 * @deve: habilitar meu tabuleiro
-                 */
-                System.err.println("Controle recebe jogada tipo DEFAULT!!");
-                this.viewAdversario.atualizarEstado('a', jog.getEstadoLocal());
-                this.viewLocal.habilitar();
-                break;
-        }
-        /*
-         ao receber uma jogada desafio,
-         eu atualizo o meu tabuleiro local
-         e atualizo o meu tabuleiro la no outrol ado.                
-         */
-
     }
 
     /**
