@@ -1,6 +1,5 @@
 package gui;
 
-import java.util.Arrays;
 import javax.swing.JOptionPane;
 import logica.Jogador;
 import logica.Controle;
@@ -186,7 +185,8 @@ public class Interface2048 extends javax.swing.JFrame {
                     + "Digite a tecla [ b ] para embaralhar o tabuleiro do adversario\n"
                     + "Digite a tecla [ c ] para desfazer a ultima jogada do adversario.";
 
-            char tipo = this.receba(desafio).charAt(0);
+            char tipo = this.receba(desafio).toLowerCase().charAt(0);
+            
             if (tipo != 'b' && tipo != 'c') {
                 this.mostre("Escolha uma opção válida!");
             } else {
@@ -204,10 +204,8 @@ public class Interface2048 extends javax.swing.JFrame {
 
     private void iniciarPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarPartidaActionPerformed
 
-        if (isPartidaIniciada()) {
-            if (confirme("Já existe uma partida em andamento. \n Deseja reiniciar?") == 0) {
-                mostre("Regra de reinicio.");
-            }
+        if (partidaIniciada) {
+            mostre("Já existe uma partida em andamento.");
         } else {
             if (controle.getStatusConexao()) {
                 partidaIniciada = true;
@@ -225,8 +223,6 @@ public class Interface2048 extends javax.swing.JFrame {
                 }
             }
         }
-
-
     }//GEN-LAST:event_iniciarPartidaActionPerformed
 
     private void sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairActionPerformed
@@ -297,9 +293,11 @@ public class Interface2048 extends javax.swing.JFrame {
                 + "Você esta sendo desafiado!");
         this.jogador.setVez(false);
         this.iniciarPartida.setEnabled(false);
+        this.partidaIniciada = true;
     }
 
     public void iniciarDesafiante() {
+        this.partidaIniciada = true;
         mostre("Partida iniciada!\n"
                 + this.idUsuario.toUpperCase() + ",\n"
                 + "Você começa!");

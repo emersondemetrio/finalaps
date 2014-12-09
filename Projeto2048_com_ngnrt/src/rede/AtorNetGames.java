@@ -123,7 +123,8 @@ public class AtorNetGames implements OuvidorProxy {
 
     @Override
     public void finalizarPartidaComErro(String message) {
-        // to do
+        inter.mostre("Erro! " + message);
+        System.exit(0);
     }
 
     @Override

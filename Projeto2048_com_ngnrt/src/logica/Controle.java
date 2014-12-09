@@ -18,6 +18,7 @@ public class Controle {
 
     protected Interface2048 viewLocal;
     protected Interface2048 viewAdversario;
+    protected boolean partidaEmAndamento;
 
     public Controle() {
 
@@ -28,12 +29,23 @@ public class Controle {
         interno = new AtorNetGames(viewLocal);
     }
 
-    public void criarJogador(String s) {
-
+    public void criarJogador(String idJogador) {
+        if (jogador1 == null) {
+            jogador1 = new Jogador(idJogador, 1);
+            viewLocal.setJogador(jogador1);
+        } else {
+            jogador2 = new Jogador(idJogador, 2);
+            viewLocal.setJogador(jogador2);
+        }
     }
 
-    public void habilitar(int e) {
-
+    public void habilitar(int pos) {
+        this.estadoConexao = true;
+        if (pos == 1) {
+            viewLocal.setJogador(jogador1);
+        } else {
+            viewLocal.setJogador(jogador2);
+        }
     }
 
     public void enviarDesafio(char tipo) {
@@ -61,7 +73,6 @@ public class Controle {
             Jogada2048 lance = new Jogada2048(estado, tipo);
             this.enviarJogada(lance);
         }
-
     }
 
     public void enviarJogada(Jogada2048 lance) {
@@ -78,16 +89,19 @@ public class Controle {
 
         char tipoJogada = jog.getTipo();
         if (tipoJogada != 'e') {
+
             if (tipoJogada == 'a') {
                 this.viewAdversario.getTabuleiro().setEstadoAnterior("Receber jogada : a");
                 this.viewAdversario.atualizarEstado(tipoJogada, jog.getEstadoLocal());
             }
 
             if (tipoJogada == 'b') {
+                this.viewLocal.getTabuleiro().setEstadoAnterior("Receber jogada : b");
                 this.viewLocal.atualizarEstado(tipoJogada, jog.getEstadoLocal());
             }
 
             if (tipoJogada == 'c') {
+                this.viewLocal.getTabuleiro().setEstadoAnterior("Receber jogada : c");
                 InterfaceTabuleiro.imprimirMatriz("Receber jogada : c", jog.getEstadoLocal());
                 this.viewLocal.atualizarEstado(tipoJogada, jog.getEstadoLocal());
             }
@@ -115,18 +129,19 @@ public class Controle {
 
         int resultado = interno.conectar(servidor, jogador1.getNome());
         if (resultado == 200) {
-            estadoConexao = true;
+            this.estadoConexao = true;
             return true;
         }
         return false;
     }
 
     public boolean isPartidaIniciada() {
-        return false;
+        return this.partidaEmAndamento;
     }
 
     public void iniciarPartida() {
         interno.iniciarPartida();
+        this.partidaEmAndamento = true;
     }
 
     public int getIdJogador(String nome) {
